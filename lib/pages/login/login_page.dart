@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_food/pages/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
+  static const routeName = '/login';
+
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -23,9 +25,15 @@ class _LoginPageState extends State<LoginPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             // ไล่เฉดจากสีแดงไปสีน้ำเงิน
+            // stops: [
+            //   0.0,
+            //   0.95,
+            //   1.0,
+            // ],
             colors: [
               Colors.white,
               Colors.teal,
+              // Colors.black,
             ],
           ),
         ),
@@ -130,10 +138,7 @@ class _LoginPageState extends State<LoginPage> {
         count++;
       }
       if (input.length == 6 && input == password) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
       } else if (input.length == 6 && input != password) {
         input = '';
         count = 0;
