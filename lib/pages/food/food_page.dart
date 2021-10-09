@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_food/pages/home/food/foodlist_page.dart';
-import 'package:flutter_food/pages/home/food/order_page.dart';
+import 'package:flutter_food/pages/food/foodlist_page.dart';
+import 'package:flutter_food/pages/food/order_page.dart';
 
 class FoodPage extends StatefulWidget {
   static const routeName = '/food';
