@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_food/models/food_item.dart';
 import 'package:flutter_food/pages/food/foodlist_page.dart';
 import 'package:flutter_food/pages/food/order_page.dart';
+import 'package:http/http.dart' as http;
 
 class FoodPage extends StatefulWidget {
   static const routeName = '/food';
@@ -36,6 +40,33 @@ class _FoodPageState extends State<FoodPage> {
           });
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _test,
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _test() async {
+    var url = Uri.parse('https://cpsu-test-api.herokuapp.com/foods');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonBody = json.decode(response.body);
+      String status = jsonBody['status'];
+      String? message = jsonBody['message'];
+      List<dynamic> data = jsonBody['data'];
+
+      print('STATUS: $status');
+      print('MASSAGE: $message');
+      // print('DATA: $data');
+
+      var foodList = data.map((element) => FoodItem(
+                id: element['id'],
+                name: element['name'],
+                price: element['price'],
+                image: element['image'],
+              ))
+          .toList();
+    }
   }
 }

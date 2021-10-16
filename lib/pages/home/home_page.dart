@@ -20,6 +20,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.teal,
         title: Text(_subPageIndex == 0 ? 'FLUTTER FOOD' : 'Profile'),
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+          IconButton(onPressed: (){}, icon: Icon(Icons.refresh)),
+        ],
       ),
       drawer: Drawer(
         child: ListView(

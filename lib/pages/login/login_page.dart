@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_food/pages/home/home_page.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   static const routeName = '/login';
@@ -13,7 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var input = '';
   var count = 0;
-  var password = '123456';
+  // var password = '123456';
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,9 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.teal.shade700,
                         ),
                       ),
-                      SizedBox(height: 8.0,),
+                      SizedBox(
+                        height: 8.0,
+                      ),
                       Text(
                         'Enter PIN to login',
                         style: TextStyle(
@@ -127,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _handleClickButton(int num) {
+  Future<void> _handleClickButton(int num) async {
     print('Number: $num');
     setState(() {
       if (num == -1) {
@@ -137,14 +142,25 @@ class _LoginPageState extends State<LoginPage> {
         input = '$input$num';
         count++;
       }
-      if (input.length == 6 && input == password) {
-        Navigator.pushReplacementNamed(context, HomePage.routeName);
-      } else if (input.length == 6 && input != password) {
-        input = '';
-        count = 0;
-        return _showMaterialDialog('ERROR', 'Invalid PIN. Please try again.');
-      }
     });
+    if (input.length == 6) {
+      var url = Uri.parse('https://cpsu-test-api.herokuapp.com/login');
+      var response = await http.post(url, body: {'pin': input});
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonbody = json.decode(response.body);
+        bool data = jsonbody['data'];
+        setState(() {
+          if (data == true) {
+            Navigator.pushReplacementNamed(context, HomePage.routeName);
+          } else {
+            input = '';
+            count = 0;
+            return _showMaterialDialog(
+                'ERROR', 'Invalid PIN. Please try again.');
+          }
+        });
+      }
+    }
   }
 
   void _showMaterialDialog(String title, String msg) {
